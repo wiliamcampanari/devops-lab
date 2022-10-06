@@ -27,43 +27,43 @@ jobs:
       - name: Run Tests
         run: python -m unittest -v test
 
-deploy-to-heroku:
-  runs-on: ubuntu-latest
+  deploy-to-heroku:
+    runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v2
-      # Busca todo o historico de commits 
-      with:
-        fetch-depth: 0
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+        # Busca todo o historico de commits 
+        with:
+          fetch-depth: 0
 
-    - name: Heroku Login
-      run: |
-          cat > ~/.netrc <<EOF
-            machine api.heroku.com
-              login $HEROKU_EMAIL
-              password $HEROKU_API_KEY
-            machine git.heroku.com
-              login $HEROKU_EMAIL
-              password $HEROKU_API_KEY
-          EOF
-      env:
-        HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-        HEROKU_EMAIL: ${{secrets.HEROKU_EMAIL}}
-      
-    - name: Add Heroku Remote
-      run: |
-        heroku git:remote --app $HEROKU_APP_NAME
-      env:
-      HEROKU_APP_NAME: ${{secrets.HEROKU_APP_NAME}}
-    
-    # deploy
-    - name: Deploy to Heroku
-      run: |
-        git push heroku HEAD:main --force
-
-
-
-
+      - name: Heroku Login
+        run: |
+            cat > ~/.netrc <<EOF
+              machine api.heroku.com
+                login $HEROKU_EMAIL
+                password $HEROKU_API_KEY
+              machine git.heroku.com
+                login $HEROKU_EMAIL
+                password $HEROKU_API_KEY
+            EOF
+        env:
+          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+          HEROKU_EMAIL: ${{secrets.HEROKU_EMAIL}}
         
+      - name: Add Heroku Remote
+        run: |
+          heroku git:remote --app $HEROKU_APP_NAME
+        env:
+          HEROKU_APP_NAME: ${{secrets.HEROKU_APP_NAME}}
+      
+      # deploy
+      - name: Deploy to Heroku
+        run: |
+          git push heroku HEAD:main --force
+
+
+
+
+          
 
